@@ -66,7 +66,7 @@ lower S/N) and says so — see the memory note below.
 ### Simulation only (no external data, ~2 minutes)
 
 ```bash
-git clone https://github.com/USERNAME/hd-pta.git
+git clone https://github.com/meamresh/hd-pta.git
 cd hd-pta
 pip install -r requirements.txt
 

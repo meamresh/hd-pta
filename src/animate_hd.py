@@ -215,34 +215,43 @@ def build(mode):
                                   linewidth=0.7, zorder=3)
                 state['sky_lines'].append(ln)
 
-        # binned points (inverse-variance weighted)
-        bm, bs, bc = [], [], []
+        # binned points: keep the fit weights tied to the mean uncertainty,
+        # but draw a more conservative within-bin spread on the plot.
+        bm, bs_fit, bs_plot, bc = [], [], [], []
         for k in range(nbins):
             m = (seps_s[:n] >= edges[k]) & (seps_s[:n] < edges[k + 1])
             if m.sum() >= 3:
-                w = 1.0 / err_s[:n][m]**2
-                mean = np.sum(rho_s[:n][m] * w) / np.sum(w)
+                vals = rho_s[:n][m]
                 if mode == 'sim':
-                    sem = rho_s[:n][m].std(ddof=1) / np.sqrt(m.sum())
+                    mean = vals.mean()
+                    fit_sem = vals.std(ddof=1) / np.sqrt(m.sum())
+                    plot_sem = vals.std(ddof=1)
                 else:
-                    sem = 1.0 / np.sqrt(np.sum(w))
+                    w = 1.0 / err_s[:n][m]**2
+                    mean = np.sum(vals * w) / np.sum(w)
+                    fit_sem = 1.0 / np.sqrt(np.sum(w))
+                    plot_sem = np.sqrt(np.average((vals - mean)**2,
+                                                  weights=w))
                 bm.append(mean)
-                bs.append(sem)
+                bs_fit.append(fit_sem)
+                bs_plot.append(plot_sem)
                 bc.append(centers[k])
-        bm, bs, bc = np.array(bm), np.array(bs), np.array(bc)
+        bm, bs_fit, bs_plot, bc = (
+            np.array(bm), np.array(bs_fit), np.array(bs_plot), np.array(bc)
+        )
 
         if len(bm) > 0:
             binned_line.set_data(bc, bm)
             binned_bars[0].set_segments(
                 [np.array([[x, y - e], [x, y + e]])
-                 for x, y, e in zip(bc, bm, bs)])
+                 for x, y, e in zip(bc, bm, bs_plot)])
         else:
             binned_line.set_data([], [])
             binned_bars[0].set_segments([])
 
         # live H-D template fit
-        if len(bm) >= 4 and np.all(bs > 0):
-            iv = 1.0 / bs**2
+        if len(bm) >= 4 and np.all(bs_fit > 0):
+            iv = 1.0 / bs_fit**2
             hd_b = hd(np.radians(bc))
             amp = np.sum(bm * hd_b * iv) / np.sum(hd_b**2 * iv)
             curve.set_data(np.degrees(theta_t), amp * hd_t)
