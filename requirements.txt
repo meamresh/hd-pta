@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------------
+# Core requirements -- enough for the SIMULATION pipeline:
+#   src/simulate_hd.py   and   src/animate_hd.py --sim
+# Install with:  pip install -r requirements.txt
+# ---------------------------------------------------------------------
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+pillow>=9.0          # GIF writer
+
+# ---------------------------------------------------------------------
+# Real-data pipeline (src/ng15_optimal_statistic.py) additionally needs
+# the NANOGrav `enterprise` stack. It is heavier and is therefore listed
+# separately -- install it only if you want the genuine measurement:
+#
+#   pip install pandas pyarrow
+#   pip install enterprise-pulsar enterprise_extensions la_forge
+#
+# enterprise_extensions depends on scikit-sparse, which needs the
+# SuiteSparse C library. On Debian/Ubuntu:
+#   sudo apt-get install libsuitesparse-dev
+# On macOS:
+#   brew install suite-sparse
+#
+# The simplest route for the real-data run is the Colab notebook
+# (notebooks/run_on_colab.ipynb), where the stack installs via conda.
+# ---------------------------------------------------------------------
