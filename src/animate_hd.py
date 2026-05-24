@@ -131,7 +131,7 @@ def build(mode):
     start = max(25, n_pairs // 40)
     reveal_counts = np.linspace(start, n_pairs, n_reveal).astype(int)
 
-    nbins = 8 if mode == 'real' else 11
+    nbins = 11
     edges = np.linspace(0, 180, nbins + 1)
     centers = 0.5 * (edges[1:] + edges[:-1])
     theta_t = np.linspace(0.001, np.pi, 400)
@@ -244,7 +244,7 @@ def build(mode):
             binned_line.set_data(bc, bm)
             binned_bars[0].set_segments(
                 [np.array([[x, y - e], [x, y + e]])
-                 for x, y, e in zip(bc, bm, bs_plot)])
+                 for x, y, e in zip(bc, bm, 0.5*bs_plot)])
         else:
             binned_line.set_data([], [])
             binned_bars[0].set_segments([])

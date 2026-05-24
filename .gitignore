@@ -1,11 +1,6 @@
 # cloned NANOGrav data (fetch with ./setup.sh -- do not commit)
 external/
 
-# generated outputs
-results/*.npz
-figures/*.gif
-figures/*.png
-
 # keep the directories themselves
 !results/.gitkeep
 !figures/.gitkeep

@@ -4,7 +4,7 @@ Reconstructing the gravitational-wave background detection from a pulsar
 timing array — the way NANOGrav did it — and watching the signal emerge,
 pair by pair, from data that shows nothing in any single pulsar.
 
-![Simulated Hellings–Downs emergence](docs/examples/hd_emergence_sim.gif)
+![Simulated Hellings–Downs emergence](figures/hd_emergence_sim.gif)
 
 ---
 
@@ -70,9 +70,15 @@ git clone https://github.com/meamresh/hd-pta.git
 cd hd-pta
 pip install -r requirements.txt
 
-python src/simulate_hd.py        # -> figures/hd_simulation.png
-python src/animate_hd.py --sim   # -> figures/hd_emergence_sim.gif
+python src/simulate_hd.py            # -> figures/hd_simulation.png
+python src/animate_hd.py --sim       # -> figures/hd_emergence_sim.gif
+python src/animate_npsr.py --sim     # -> figures/hd_growing_array_sim.gif
 ```
+
+The repo ships two animations:
+
+- **`animate_hd.py`** reveals the 2,211 pulsar pairs one batch at a time, so the curve fills in pair by pair.
+- **`animate_npsr.py`** grows the array from 6 pulsars to all 67. Because S/N grows with the *number of pairs* (≈ N²), the binned points sharpen onto the Hellings–Downs curve frame by frame and the live detection counter climbs from "—" to ~12σ.
 
 ### Real NANOGrav 15-year data
 
@@ -92,12 +98,13 @@ sudo apt-get install libsuitesparse-dev      # Debian/Ubuntu
 
 pip install -r requirements.txt
 pip install pandas pyarrow
-pip install enterprise-pulsar enterprise_extensions la_forge
+pip install "enterprise-pulsar" "enterprise_extensions>=3.0.2" "la_forge"
 
 ./setup.sh                                   # clone real NANOGrav data
 
 python src/ng15_optimal_statistic.py         # -> results/ng15_real_os.npz
 python src/animate_hd.py --real              # -> figures/hd_emergence_real.gif
+python src/animate_npsr.py --real            # -> figures/hd_growing_array_real.gif
 ```
 
 ---
@@ -171,7 +178,8 @@ hd-pta/
 ├── src/
 │   ├── simulate_hd.py             # simulation + summary figure
 │   ├── ng15_optimal_statistic.py  # real NANOGrav optimal statistic
-│   └── animate_hd.py              # animation (--sim | --real)
+│   ├── animate_hd.py              # animate pair-by-pair (--sim | --real)
+│   └── animate_npsr.py            # animate growing array (--sim | --real)
 ├── notebooks/
 │   └── run_on_colab.ipynb         # full real-data run on Colab
 ├── docs/
